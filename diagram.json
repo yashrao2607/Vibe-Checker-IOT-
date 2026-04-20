@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "author": "Crowd Mood Estimator",
+  "author": "Antigravity",
   "editor": "wokwi",
   "parts": [
     {
@@ -93,32 +93,32 @@
     }
   ],
   "connections": [
-    ["uno:A4",   "lcd:SDA",  "green",  []],
-    ["uno:A5",   "lcd:SCL",  "blue",   []],
-    ["uno:5V",   "lcd:VCC",  "red",    []],
-    ["uno:GND.1","lcd:GND",  "black",  []],
+    ["uno:A4", "lcd:SDA", "green", []],
+    ["uno:A5", "lcd:SCL", "blue", []],
+    ["uno:5V", "lcd:VCC", "red", []],
+    ["uno:GND.1", "lcd:GND", "black", []],
 
-    ["pot:SIG",  "uno:A0",   "green",  []],
-    ["pot:VCC",  "uno:5V",   "red",    []],
-    ["pot:GND",  "uno:GND.1","black",  []],
+    ["pot:SIG", "uno:A0", "green", []],
+    ["pot:VCC", "uno:5V", "red", []],
+    ["pot:GND", "uno:GND.2", "black", []],
 
-    ["uno:8",    "rG:1",     "green",  []],
-    ["rG:2",     "ledG:A",   "green",  []],
-    ["ledG:C",   "uno:GND.1","black",  []],
+    ["uno:8", "rG:1", "green", []],
+    ["rG:2", "ledG:A", "green", []],
+    ["ledG:C", "uno:GND.3", "black", []],
 
-    ["uno:9",    "rY:1",     "yellow", []],
-    ["rY:2",     "ledY:A",   "yellow", []],
-    ["ledY:C",   "uno:GND.1","black",  []],
+    ["uno:9", "rY:1", "yellow", []],
+    ["rY:2", "ledY:A", "yellow", []],
+    ["ledY:C", "uno:GND.3", "black", []],
 
-    ["uno:10",   "rO:1",     "orange", []],
-    ["rO:2",     "ledO:A",   "orange", []],
-    ["ledO:C",   "uno:GND.1","black",  []],
+    ["uno:10", "rO:1", "orange", []],
+    ["rO:2", "ledO:A", "orange", []],
+    ["ledO:C", "uno:GND.3", "black", []],
 
-    ["uno:11",   "rR:1",     "red",    []],
-    ["rR:2",     "ledR:A",   "red",    []],
-    ["ledR:C",   "uno:GND.1","black",  []],
+    ["uno:11", "rR:1", "red", []],
+    ["rR:2", "ledR:A", "red", []],
+    ["ledR:C", "uno:GND.3", "black", []],
 
-    ["uno:12",   "buzzer:1", "black",  []],
-    ["buzzer:2", "uno:GND.1","black",  []]
+    ["uno:12", "buzzer:1", "black", []],
+    ["buzzer:2", "uno:GND.3", "black", []]
   ]
 }
