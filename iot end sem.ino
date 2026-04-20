@@ -22,7 +22,7 @@ const int SAMPLE_WINDOW = 40;
 float noiseFloor = 0;         
 float peakVariance = 0;       
 
-// Initializing with default 0x27 (will auto-switch if needed)
+// Use fixed Wokwi LCD I2C address for stability
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 // Custom Characters for Pulse Meter
@@ -37,14 +37,6 @@ byte bar8[8] = {0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F, 0x1F};
 
 void setup() {
   Serial.begin(115200);
-  
-  // --- Auto-Detect I2C Address ---
-  Wire.begin();
-  Wire.beginTransmission(0x27);
-  if (Wire.endTransmission() != 0) {
-    // If 0x27 fails, try 0x3F
-    lcd = LiquidCrystal_I2C(0x3F, 16, 2);
-  }
 
   lcd.init();
   lcd.backlight();
@@ -58,6 +50,10 @@ void setup() {
   pinMode(LED_CALM, OUTPUT); pinMode(LED_ACTIVE, OUTPUT);
   pinMode(LED_EXCITED, OUTPUT); pinMode(LED_CHAOTIC, OUTPUT);
   pinMode(BUZZER_PIN, OUTPUT);
+
+  // Startup sanity blink so we can confirm firmware is executing.
+  digitalWrite(LED_CALM, HIGH); delay(150);
+  digitalWrite(LED_CALM, LOW);  delay(150);
 
   // Splash Screen
   lcd.setCursor(1, 0); lcd.print("CROWD ANALYZER");
