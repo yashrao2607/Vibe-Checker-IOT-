@@ -20,7 +20,7 @@ const int BUZZER_PIN  = 12;
 // Settings
 const int SAMPLE_WINDOW = 40; 
 float noiseFloor = 0;         
-float peakVariance = 0;       
+float peakScore = 0;       
 
 // Use fixed Wokwi LCD I2C address for stability
 LiquidCrystal_I2C lcd(0x27, 16, 2);
@@ -93,35 +93,48 @@ void loop() {
   }
   float variance = varianceSum / SAMPLE_WINDOW;
 
-  // 3. Peak Tracking
-  if (variance > peakVariance) peakVariance = variance;
+  // 3. Build a score that responds to both level and fluctuation.
+  float crowdScore = (avgEnergy * 0.85) + (sqrt(variance) * 0.15);
 
-  // 4. Mood Logic
+  // Adaptive normalization for microphone input so mood transitions
+  // remain visible across different ambient environments.
+  static float adaptiveMax = 80.0;
+  if (crowdScore > adaptiveMax) adaptiveMax = crowdScore;
+  adaptiveMax = max(40.0, adaptiveMax * 0.995);
+  float normalizedScore = constrain((crowdScore / adaptiveMax) * 100.0, 0.0, 100.0);
+
+  // 4. Peak Tracking
+  if (crowdScore > peakScore) peakScore = crowdScore;
+
+  // 5. Mood Logic (adaptive for microphone input)
   String mood;
   int moodLvl = 0;
-  if      (variance < 2000)  { mood = "CALM   "; moodLvl = 1; }
-  else if (variance < 10000) { mood = "ACTIVE "; moodLvl = 2; }
-  else if (variance < 35000) { mood = "EXCITED"; moodLvl = 3; }
+  if      (normalizedScore < 25) { mood = "CALM   "; moodLvl = 1; }
+  else if (normalizedScore < 50) { mood = "ACTIVE "; moodLvl = 2; }
+  else if (normalizedScore < 75) { mood = "EXCITED"; moodLvl = 3; }
   else                       { mood = "CHAOTIC"; moodLvl = 4; }
 
-  // 5. Visual/Audio Output
+  // 6. Visual/Audio Output
   updateHardware(moodLvl);
 
-  // 6. LCD Update
+  // 7. LCD Update
   lcd.setCursor(0, 0);
   lcd.print("MOOD: " + mood);
   
   // Custom Intensity Meter on Row 1
   lcd.setCursor(0, 1);
-  int meterWidth = map(constrain(variance, 0, 50000), 0, 50000, 0, 15);
+  int meterWidth = map((int)normalizedScore, 0, 100, 0, 15);
   for(int i=0; i<16; i++) {
     if(i <= meterWidth) lcd.write((uint8_t)map(meterWidth, 0, 15, 0, 7));
     else lcd.print(" ");
   }
 
-  // 7. Data Logging
-  Serial.print("[DATA] Var:"); Serial.print(variance);
-  Serial.print(" | Peak:"); Serial.println(peakVariance);
+  // 8. Data Logging
+  Serial.print("[DATA] Avg:"); Serial.print(avgEnergy);
+  Serial.print(" | Var:"); Serial.print(variance);
+  Serial.print(" | Score:"); Serial.print(crowdScore);
+  Serial.print(" | Norm:"); Serial.print(normalizedScore);
+  Serial.print(" | Peak:"); Serial.println(peakScore);
   
   delay(50);
 }

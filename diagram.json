@@ -18,11 +18,11 @@
       "attrs": { "pins": "i2c" }
     },
     {
-      "type": "wokwi-potentiometer",
-      "id": "pot",
+      "type": "wokwi-microphone",
+      "id": "mic",
       "top": 340,
       "left": -200,
-      "attrs": { "label": "Crowd Energy" }
+      "attrs": {}
     },
     {
       "type": "wokwi-led",
@@ -98,9 +98,8 @@
     ["uno:5V", "lcd:VCC", "red", []],
     ["uno:GND.1", "lcd:GND", "black", []],
 
-    ["pot:SIG", "uno:A0", "green", []],
-    ["pot:VCC", "uno:5V", "red", []],
-    ["pot:GND", "uno:GND.2", "black", []],
+    ["mic:1", "uno:A0", "green", []],
+    ["mic:2", "uno:GND.2", "black", []],
 
     ["uno:8", "rG:1", "green", []],
     ["rG:2", "ledG:A", "green", []],
