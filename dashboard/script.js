@@ -324,5 +324,44 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1500);
     });
 
+    // Theme Toggle Logic
+    const themeBtn = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    
+    function updateChartColors() {
+        const isLight = document.body.classList.contains('light-mode');
+        const color = isLight ? '#475569' : '#94a3b8';
+        const gridColor = isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
+
+        [scoreGauge, importanceChart, variationChart, disturbanceTimeline].forEach(chart => {
+            if (chart.options.scales) {
+                Object.values(chart.options.scales).forEach(scale => {
+                    if (scale.ticks) scale.ticks.color = color;
+                    if (scale.grid) scale.grid.color = gridColor;
+                });
+            }
+            chart.update('none');
+        });
+    }
+
+    themeBtn.addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
+        const isLight = document.body.classList.contains('light-mode');
+        
+        themeIcon.setAttribute('data-lucide', isLight ? 'moon' : 'sun');
+        lucide.createIcons();
+        
+        localStorage.setItem('vibe-theme', isLight ? 'light' : 'dark');
+        updateChartColors();
+    });
+
+    // Load saved theme
+    if (localStorage.getItem('vibe-theme') === 'light') {
+        document.body.classList.add('light-mode');
+        themeIcon.setAttribute('data-lucide', 'moon');
+        lucide.createIcons();
+        setTimeout(updateChartColors, 500);
+    }
+
     setInterval(updateData, 2000);
 });

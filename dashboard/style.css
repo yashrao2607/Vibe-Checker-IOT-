@@ -1,4 +1,5 @@
 :root {
+    /* Dark Mode Defaults */
     --primary: #6366f1;
     --primary-glow: rgba(99, 102, 241, 0.4);
     --secondary: #10b981;
@@ -10,12 +11,26 @@
     --text-muted: #94a3b8;
     --glass-border: rgba(255, 255, 255, 0.1);
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --transition-speed: 0.3s;
+}
+
+body.light-mode {
+    --bg-dark: #f8fafc;
+    --card-bg: rgba(255, 255, 255, 0.85);
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --glass-border: rgba(99, 102, 241, 0.1);
+    --primary-glow: rgba(99, 102, 241, 0.2);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    transition: background-color var(--transition-speed) ease, 
+                color var(--transition-speed) ease, 
+                border-color var(--transition-speed) ease, 
+                box-shadow var(--transition-speed) ease;
 }
 
 body {
