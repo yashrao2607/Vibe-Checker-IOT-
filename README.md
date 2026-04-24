@@ -78,3 +78,21 @@ Arduino uses these messages to update mood output in real time.
 
 - If serial messages stop for >3 seconds, Arduino falls back to local microphone mode.
 - Press `q` to close preview window in Python script.
+
+## Audio File to Mood (Your MP3)
+
+You can also play an audio file and stream mood updates to Arduino in sync.
+
+Install dependencies:
+
+```powershell
+pip install -r requirements-video.txt
+```
+
+Run:
+
+```powershell
+python audio_mood_stream.py --audio "C:\Users\KRISH\Desktop\iot end sem\Crowd Noise 1 Hour White Noise - Ambience.mp3" --port COM5
+```
+
+Replace `COM5` with your Arduino port.

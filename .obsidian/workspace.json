@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "a3992dc239d65123",
+        "id": "6f1c69086c79a389",
         "type": "tabs",
         "children": [
           {
-            "id": "56c25bb0f81be7e9",
+            "id": "b82f1bb06703d7ec",
             "type": "leaf",
             "state": {
-              "type": "graph",
+              "type": "empty",
               "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "icon": "lucide-file",
+              "title": "New tab"
             }
           }
         ]
@@ -162,8 +162,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -176,11 +175,13 @@
       "bases:Create new base": false
     }
   },
-  "active": "56c25bb0f81be7e9",
+  "active": "b82f1bb06703d7ec",
   "lastOpenFiles": [
+    "FLOW_CHART.md",
+    "REPORT_TEMPLATE.md",
+    "CIRCUIT_DIAGRAM.md",
     "build/firmware.elf",
     "build/firmware.hex",
-    "REPORT_TEMPLATE.md",
     "build/iot end sem.ino.with_bootloader.hex",
     "build/iot end sem.ino.with_bootloader.bin",
     "build/iot end sem.ino.elf",
@@ -189,7 +190,6 @@
     "build",
     "iot end sem.ino",
     "libraries.txt",
-    "README.md",
-    "sketch.ino"
+    "README.md"
   ]
 }

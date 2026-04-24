@@ -59,6 +59,8 @@ def analyze_stream(
     start_wall = time.time()
     next_emit = 0.0
 
+    preview_enabled = show_preview
+
     while True:
         ok, frame = cap.read()
         if not ok:
@@ -93,26 +95,34 @@ def analyze_stream(
         score = int(np.clip((smoothed / adaptive_max) * 100.0, 0.0, 100.0))
         mood = classify_mood(score)
 
-        if show_preview:
-            overlay = frame.copy()
-            cv2.putText(
-                overlay,
-                f"{mood} ({score})",
-                (20, 40),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                1.0,
-                (0, 255, 0),
-                2,
-                cv2.LINE_AA,
-            )
-            cv2.imshow("Crowd Mood Analyzer", overlay)
-            if cv2.waitKey(1) & 0xFF == ord("q"):
-                break
+        if preview_enabled:
+            try:
+                overlay = frame.copy()
+                cv2.putText(
+                    overlay,
+                    f"{mood} ({score})",
+                    (20, 40),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    1.0,
+                    (0, 255, 0),
+                    2,
+                    cv2.LINE_AA,
+                )
+                cv2.imshow("Crowd Mood Analyzer", overlay)
+                if cv2.waitKey(1) & 0xFF == ord("q"):
+                    break
+            except cv2.error:
+                print(
+                    "[WARN] OpenCV preview is unavailable in this environment. "
+                    "Continuing without --show window.",
+                    flush=True,
+                )
+                preview_enabled = False
 
         yield MoodResult(mood=mood, score=score, raw=raw, smooth=smoothed)
 
     cap.release()
-    if show_preview:
+    if preview_enabled:
         cv2.destroyAllWindows()
 
 
@@ -169,4 +179,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
