@@ -116,9 +116,14 @@
                             </div>
                             <i data-lucide="database" style="color: var(--primary);"></i>
                         </div>
-                        <button onclick="window.open('../crowd_mood_history.csv')" class="action-btn" style="width: 100%; margin-top: 1rem; font-size: 0.75rem; justify-content: center; height: 35px;">
-                            <i data-lucide="download" style="width: 14px;"></i> EXPORT CSV REPORT
-                        </button>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap:0.5rem; margin-top: 1rem;">
+                            <button onclick="window.open('../crowd_mood_history.csv')" class="action-btn" style="font-size: 0.65rem; justify-content: center; height: 35px; background: rgba(99, 102, 241, 0.2);">
+                                <i data-lucide="file-text" style="width: 12px;"></i> HISTORY.CSV
+                            </button>
+                            <button onclick="window.open('../session_shout_log.csv')" class="action-btn" style="font-size: 0.65rem; justify-content: center; height: 35px; background: rgba(16, 185, 129, 0.2);">
+                                <i data-lucide="file-spreadsheet" style="width: 12px;"></i> SESSION.CSV
+                            </button>
+                        </div>
                     </div>
 
                     <div class="control-item">
