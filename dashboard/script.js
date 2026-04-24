@@ -85,11 +85,12 @@ document.addEventListener('DOMContentLoaded', () => {
             datasets: [{
                 label: 'dB Variation (1000+ Samples)',
                 data: Array.from({ length: 1000 }, () => (40 + Math.random() * 40)),
-                borderColor: 'rgba(99, 102, 241, 0.4)',
-                backgroundColor: 'rgba(99, 102, 241, 0.05)',
-                borderWidth: 1,
+                borderColor: '#6366f1',
+                backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                borderWidth: 1.5,
                 pointRadius: 0,
-                fill: true
+                fill: true,
+                tension: 0.3
             }]
         },
         options: {
