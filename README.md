@@ -1,98 +1,143 @@
-﻿#  Digital Crowd Mood Estimator v2.0
+# 🌌 Vibe-Checker-IOT v2.0
+### *Next-Gen Digital Crowd Mood Estimator & AI Hybrid Monitor*
 
-An IoT semester project that classifies crowd mood and displays it on LCD/LED/Buzzer.
+Vibe-Checker-IOT is a sophisticated hybrid system designed to monitor, analyze, and visualize "crowd vibes" in real-time. By combining edge-computing on **Arduino** with advanced AI processing on a **PC**, it provides a multi-modal approach to understanding environmental energy levels through audio and video signals.
 
-## Modes
+---
 
-1. Microphone mode (on-board): Arduino reads analog mic input and estimates mood.
-2. AI hybrid mode (PC + Arduino): Python analyzes video/webcam activity and streams mood to Arduino over serial.
+## 🏗️ System Architecture
 
-## Hardware (Simulation / Real)
+```mermaid
+graph TD
+    subgraph "SENSORS & INPUTS"
+        A[Analog Microphone] -->|Raw Voltage| B[Arduino Uno]
+        C[Video/Webcam Feed] -->|Frames| D[Python AI Engine]
+        E[Audio File/Stream] -->|PCM Data| D
+    end
 
-- Arduino Uno
-- LCD1602 (I2C)
-- LEDs (Green/Yellow/Orange/Red)
-- Piezo buzzer
-- Microphone sensor (analog)
+    subgraph "PROCESSING MODES"
+        B -->|Mode 1: Standalone| F[Local DSP Logic]
+        D -->|Mode 2: AI Hybrid| G[Advanced Feature Extraction]
+        G -->|Serial Protocol| B
+    end
 
-## Arduino File
-
-- Main sketch: `iot end sem.ino`
-
-## Compile (Arduino CLI)
-
-```powershell
-arduino-cli compile --fqbn arduino:avr:uno --libraries . --output-dir build .
+    subgraph "OUTPUT & FEEDBACK"
+        F --> H[I2C LCD Display]
+        F --> I[LED Indicators]
+        F --> J[Piezo Siren]
+        D --> K[Web Dashboard]
+        D --> L[CSV Logging]
+    end
 ```
 
-## Wokwi
+---
 
-`wokwi.toml` expects:
+## 🚀 Key Features
 
-- `build/firmware.hex`
-- `build/firmware.elf`
+*   **Hybrid Dual-Mode Logic**: Seamlessly switches between local microphone analysis and high-fidelity PC-based AI streaming.
+*   **Advanced Audio AI**: Uses `librosa` to extract RMS Energy, Zero-Crossing Rate, and Spectral Centroid for precise mood classification.
+*   **Real-time Computer Vision**: Analyzes crowd activity via motion vectors, edge density, and contrast variability using OpenCV.
+*   **Adaptive Normalization**: The Arduino firmware auto-calibrates to the noise floor and dynamically adjusts sensitivity based on peak tracking.
+*   **Premium Web Dashboard**: A sleek, dark-mode visualization tool built with Chart.js for real-time monitoring and historical analysis.
+*   **Automated Data Logging**: Generates session reports and CSV history for long-term trend analysis.
 
-After compile:
+---
 
-```powershell
-Copy-Item -LiteralPath ".\\build\\iot end sem.ino.hex" -Destination ".\\build\\firmware.hex" -Force
-Copy-Item -LiteralPath ".\\build\\iot end sem.ino.elf" -Destination ".\\build\\firmware.elf" -Force
-```
+## 🛠️ Hardware Specifications
 
-Restart simulation after updating firmware files.
+### Bill of Materials
+- **Microcontroller**: Arduino Uno R3
+- **Display**: LCD1602 with I2C Interface (PCF8574)
+- **Sensors**: Analog Sound Sensor (Microphone)
+- **Indicators**: 4x LEDs (Green, Yellow, Orange, Red)
+- **Alerts**: Piezo Buzzer
+- **Communication**: USB Serial (115200 Baud)
 
-## AI Video-to-Mood Streaming (PC -> Arduino)
+### Wiring Logic
+| Component | Pin | Description |
+|-----------|-----|-------------|
+| Mic Sensor | A0 | Analog Input |
+| LCD SDA | A4 | I2C Data |
+| LCD SCL | A5 | I2C Clock |
+| Green LED | D8 | Mood: CALM |
+| Yellow LED| D9 | Mood: ACTIVE |
+| Orange LED| D10| Mood: EXCITED|
+| Red LED   | D11| Mood: CHAOTIC|
+| Buzzer    | D12| Siren Alert |
 
-### 1) Install Python dependencies
+---
 
+## 🧠 AI Engine Logic
+
+### Audio Analysis (`audio_mood_stream.py`)
+The system calculates a "Vibe Score" (0-100) using a weighted formula:
+$$Score = 0.65 \times RMS + 0.20 \times ZCR + 0.15 \times SpectralCentroid$$
+- **RMS (Root Mean Square)**: Measures the volume/energy level.
+- **ZCR (Zero Crossing Rate)**: Measures the "noisiness" or percussiveness.
+- **Spectral Centroid**: Measures the "brightness" or frequency distribution.
+
+### Video Analysis (`video_mood_stream.py`)
+Activity is estimated by tracking changes in consecutive frames:
+- **Motion**: Mean absolute difference between frames.
+- **Contrast**: Standard deviation of pixel intensities.
+- **Edge Density**: Percentage of Canny-detected edges (detects complexity).
+
+---
+
+## 💻 Software Setup
+
+### 1. Arduino Firmware
+Open `iot end sem.ino` in the Arduino IDE.
+- Install `LiquidCrystal I2C` library.
+- Set Board to **Arduino Uno**.
+- Upload and note your **COM Port**.
+
+### 2. Python Environment
+Install dependencies:
 ```powershell
 pip install -r requirements-video.txt
+# Additional for audio mode
+pip install librosa pygame pyserial numpy opencv-python
 ```
 
-### 2) Upload Arduino sketch and note COM port
+---
 
-- Upload `iot end sem.ino`.
-- Ensure serial baud is `115200`.
+## 🎮 How to Run
 
-### 3) Run video analyzer
+### Standalone Mode
+Simply power the Arduino. It will auto-calibrate for 2 seconds and start monitoring using the on-board microphone.
 
-From video file:
-
-```powershell
-python video_mood_stream.py --video "path\\to\\crowd.mp4" --port COM5 --realtime --show
-```
-
-From webcam:
-
+### AI Hybrid Mode (Video)
+Stream mood from a video file or webcam to Arduino:
 ```powershell
 python video_mood_stream.py --video 0 --port COM5 --show
 ```
 
-The script sends serial messages like:
-
-`MOOD:EXCITED,SCORE:72`
-
-Arduino uses these messages to update mood output in real time.
-
-## Notes
-
-- If serial messages stop for >3 seconds, Arduino falls back to local microphone mode.
-- Press `q` to close preview window in Python script.
-
-## Audio File to Mood (Your MP3)
-
-You can also play an audio file and stream mood updates to Arduino in sync.
-
-Install dependencies:
-
+### AI Hybrid Mode (Audio)
+Play a track and sync the hardware vibes:
 ```powershell
-pip install -r requirements-video.txt
+python audio_mood_stream.py --audio "path/to/vibe.mp3" --port COM5
 ```
 
-Run:
+---
 
-```powershell
-python audio_mood_stream.py --audio "C:\Users\KRISH\Desktop\iot end sem\Crowd Noise 1 Hour White Noise - Ambience.mp3" --port COM5
-```
+## 📊 Visualizations & Dashboard
+The project generates several analytical charts located in the root directory:
+- `vibe_heatmap.png`: Shows temporal density of different moods.
+- `vibe_regression.png`: Correlates noise levels with mood scores.
+- `vibe_feature_importance.png`: Breakdown of sensor contribution.
 
-Replace `COM5` with your Arduino port.
+**Web Dashboard**: Open `dashboard/index.html` in any browser for a live-metering experience.
+
+---
+
+## 📂 Project Structure
+- `iot end sem.ino`: Core Arduino firmware with Serial override logic.
+- `video_mood_stream.py`: OpenCV-based crowd activity analyzer.
+- `audio_mood_stream.py`: Librosa-based audio feature extractor.
+- `dashboard/`: Premium HTML/JS visualization suite.
+- `crowd_mood_history.csv`: Persistent log of all detected "vibes".
+- `wokwi.toml`: Configuration for online simulation.
+
+---
+*Created as an IoT Semester Project. v2.0 - 2026*
