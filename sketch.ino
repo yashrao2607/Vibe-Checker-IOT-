@@ -10,7 +10,7 @@
 
 const int SOUND_PIN = A0;
 const int LED_CALM = 8, LED_ACTIVE = 9, LED_EXCITED = 10, LED_CHAOTIC = 11;
-const int BUZZER_PIN = 12;
+// const int BUZZER_PIN = 12;
 
 LiquidCrystal_I2C lcd(0x27, 16, 2); 
 
@@ -31,7 +31,7 @@ void setup() {
   pinMode(LED_ACTIVE, OUTPUT);
   pinMode(LED_EXCITED, OUTPUT); 
   pinMode(LED_CHAOTIC, OUTPUT);
-  pinMode(BUZZER_PIN, OUTPUT);
+  // pinMode(BUZZER_PIN, OUTPUT);
 
   // Initial Splash
   lcd.setCursor(1, 0); lcd.print("CROWD ANALYZER");
@@ -92,13 +92,15 @@ void loop() {
   digitalWrite(LED_EXCITED, (simulatedVal >= 600 && simulatedVal < 900) ? HIGH : LOW);
   digitalWrite(LED_CHAOTIC, (simulatedVal >= 900) ? HIGH : LOW);
 
-  // Siren alert for Chaotic
+  // Siren alert for Chaotic (Disabled)
+  /*
   if (simulatedVal >= 900) {
     // Pulsing tone to get attention
     tone(BUZZER_PIN, (runTime % 1000 < 500) ? 1000 : 800); 
   } else {
     noTone(BUZZER_PIN);
   }
+  */
 
   // Data Log for Serial Monitor
   Serial.print("[SIMULATION] Energy Level: "); 

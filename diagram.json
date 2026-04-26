@@ -83,13 +83,6 @@
       "left": 215,
       "rotate": 90,
       "attrs": { "value": "220" }
-    },
-    {
-      "type": "wokwi-buzzer",
-      "id": "buzzer",
-      "top": 370,
-      "left": 280,
-      "attrs": { "label": "ALERT" }
     }
   ],
   "connections": [
@@ -115,9 +108,6 @@
 
     ["uno:11", "rR:1", "red", []],
     ["rR:2", "ledR:A", "red", []],
-    ["ledR:C", "uno:GND.3", "black", []],
-
-    ["uno:12", "buzzer:1", "black", []],
-    ["buzzer:2", "uno:GND.3", "black", []]
+    ["ledR:C", "uno:GND.3", "black", []]
   ]
 }

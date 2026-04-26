@@ -15,7 +15,7 @@ const int LED_CALM    = 8;
 const int LED_ACTIVE  = 9;
 const int LED_EXCITED = 10;
 const int LED_CHAOTIC = 11;
-const int BUZZER_PIN  = 12;
+// const int BUZZER_PIN  = 12;
 
 // Settings
 const int SAMPLE_WINDOW = 40; 
@@ -58,7 +58,7 @@ void setup() {
 
   pinMode(LED_CALM, OUTPUT); pinMode(LED_ACTIVE, OUTPUT);
   pinMode(LED_EXCITED, OUTPUT); pinMode(LED_CHAOTIC, OUTPUT);
-  pinMode(BUZZER_PIN, OUTPUT);
+  // pinMode(BUZZER_PIN, OUTPUT);
 
   // Startup sanity blink so we can confirm firmware is executing.
   digitalWrite(LED_CALM, HIGH); delay(150);
@@ -157,11 +157,13 @@ void updateHardware(int level) {
   digitalWrite(LED_EXCITED, level == 3 ? HIGH : LOW);
   digitalWrite(LED_CHAOTIC, level == 4 ? HIGH : LOW);
 
+  /*
   if (level == 4) {
     tone(BUZZER_PIN, 1000);
   } else {
     noTone(BUZZER_PIN);
   }
+  */
 }
 
 void renderMood(String mood, int scorePercent) {
